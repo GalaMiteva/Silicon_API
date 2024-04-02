@@ -17,7 +17,10 @@ public class CoursesController(DataContext context) : ControllerBase
     [HttpGet]
     [UseApiKey]
 
-    public async Task<IActionResult> GetAll() => Ok(await _context.Courses.ToListAsync());
+    public async Task<IActionResult> GetAll() 
+        
+        => Ok(await _context.Courses.ToListAsync());
+
 
 
     [HttpGet("{id}")]
