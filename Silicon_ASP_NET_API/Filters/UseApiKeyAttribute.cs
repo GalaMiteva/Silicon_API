@@ -5,6 +5,7 @@ namespace Silicon_ASP_NET_API.Filters;
 
 [AttributeUsage(validOn: AttributeTargets.Class | AttributeTargets.Method)]
 
+
 public class UseApiKeyAttribute : Attribute, IAsyncActionFilter
 {
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -26,5 +27,6 @@ public class UseApiKeyAttribute : Attribute, IAsyncActionFilter
 
         await next();
     }
+
 
 }
