@@ -1,9 +1,13 @@
 ﻿using Infrastructure.Contexts;
+using Infrastructure.Dtos;
 using Infrastructure.Entities;
+using Infrastructure.Factory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Silicon_ASP_NET_API.Dtos;
 using Silicon_ASP_NET_API.Filters;
+using Silicon_ASP_NET_API.Models;
 
 namespace Silicon_ASP_NET_API.Controllers;
 
@@ -17,9 +21,32 @@ public class CoursesController(DataContext context) : ControllerBase
     [HttpGet]
     [UseApiKey]
 
-    public async Task<IActionResult> GetAll() 
-        
-        => Ok(await _context.Courses.ToListAsync());
+    public async Task<IActionResult> GetAll(string category = "", string searchQuery = "", int pageNumber = 1, int pageSize = 10)
+    {
+        var query = _context.Courses.Include(i => i.Category).AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(category) && category != "all")
+            query = query.Where(x => x.Category!.CategoryName == category);
+
+        if (!string.IsNullOrEmpty(searchQuery))
+            query = query.Where(x => x.Title.Contains(searchQuery) || x.Author!.Contains(searchQuery));
+
+        query = query.OrderByDescending(x => x.Title);
+        var courses = await query.ToListAsync();
+
+        var response = new CourseResult
+        {
+            Succeeded = true,
+            TotalItems = await query.CountAsync(),
+        };
+
+        response.TotalPages = (int)Math.Ceiling(response.TotalItems / (double)pageSize);
+        response.Courses = CourseFactory.Create(await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync());
+
+
+        return Ok(response);
+    }
+
 
 
 
@@ -55,8 +82,52 @@ public class CoursesController(DataContext context) : ControllerBase
             _context.Courses.Add(courseEntity);
             await _context.SaveChangesAsync();
 
-            return Created("", (CourseDto)courseEntity);
+            return Created("", (CourseForm)courseEntity);
         }
         return BadRequest();
+    }
+
+
+    [UseApiKey]
+    [Authorize]
+    [HttpPut("{id}")]
+
+    public async Task<IActionResult> Update(int id, [FromBody] CourseRegistrationForm model)
+    {
+        var course = await _context.Courses.FindAsync(id);
+
+        if (course == null)
+        {
+            return NotFound();
+        }
+
+        course.Title = model.Title;
+        course.Author = model.Author;
+
+        _context.Courses.Update(course);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+
+    [UseApiKey]
+    [Authorize]
+    [HttpDelete("{id}")]
+
+    public async Task<IActionResult> Delete(int id)
+    {
+
+        var course = await _context.Courses.FindAsync(id);
+
+        if (course == null)
+        {
+            return NotFound();
+        }
+
+        _context.Courses.Remove(course);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
     }
 }

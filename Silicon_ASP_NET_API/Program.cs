@@ -16,7 +16,9 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 
 builder.Services.RegisterDbContexts(builder.Configuration);
+builder.Services.RegisterJwt(builder.Configuration);
 builder.Services.RegisterSwagger();
+
 
 var app = builder.Build();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
@@ -26,8 +28,9 @@ app.UseSwagger();
 app.UseSwaggerUI(x=>x.SwaggerEndpoint("/swagger/v1/swagger.json", "Silicon Web Api v1"));
 
 
-app.UseHttpsRedirection();
 
+app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

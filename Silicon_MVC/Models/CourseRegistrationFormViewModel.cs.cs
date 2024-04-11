@@ -22,7 +22,7 @@ public class CourseRegistrationFormViewModel
 
 
     [Display(Name = "Is a bestseller")]
-    public bool IsBestseller { get; set; } = false;
+    public bool IsBestseller  = false;
 
 
     [Display(Name = "Likes In Numbers")]

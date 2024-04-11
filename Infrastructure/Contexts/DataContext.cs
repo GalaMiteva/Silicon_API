@@ -9,4 +9,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
 {
     public DbSet<CourseEntity> Courses { get; set; } = null!;
     public DbSet<SubscriberEntity> Subscribers { get; set; } = null!;
+    public DbSet<CategoryEntity> Categories { get; set; }
+    public DbSet<SubscriberCourseEntity> SubscriberCourses { get; set; }
+    public DbSet<ContactEntity> Contacts { get; set; } = null!;
 }

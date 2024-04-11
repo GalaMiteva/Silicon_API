@@ -14,4 +14,7 @@ public class CourseEntity
     public decimal LikesInProcent { get; set; }
     public string? Author { get; set; }
     public string? Img { get; set; }
+
+    public int? CategoryId { get; set; }
+    public CategoryEntity? Category { get; set; }
 }
