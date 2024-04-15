@@ -11,9 +11,9 @@ namespace Silicon_ASP_NET_API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController( IConfiguration configuration) : ControllerBase
+public class AuthController( IConfiguration configuration, DataContext context) : ControllerBase
 {
-   // private readonly DataContext _context = context;
+    private readonly DataContext _context = context;
     private readonly IConfiguration _configuration = configuration;
 
 
@@ -30,8 +30,8 @@ public class AuthController( IConfiguration configuration) : ControllerBase
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new(ClaimTypes.Email, form.Email),
-                    new(ClaimTypes.Name, form.Email)
+                    new Claim(ClaimTypes.Email, form.Email),
+                    new Claim(ClaimTypes.Name, form.Email)
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 Issuer = _configuration["Jwt:Issuer"],

@@ -17,7 +17,7 @@ public static class JwtConfiguration
                     ValidIssuer = configuration["Jwt:Issuer"],
 
                     ValidateAudience = true,
-                    ValidAudience = configuration["Jwt:Audience"],
+                    ValidAudience = configuration[" Jwt:Audience"],
 
                     ValidateLifetime = true,
 

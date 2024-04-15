@@ -30,7 +30,7 @@ app.UseSwaggerUI(x=>x.SwaggerEndpoint("/swagger/v1/swagger.json", "Silicon Web A
 
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
