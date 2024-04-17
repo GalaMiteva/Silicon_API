@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Contexts;
-using Infrastructure.Dtos;
+
 using Infrastructure.Entities;
+using Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using Silicon_ASP_NET_API.Filters;
 
@@ -12,24 +13,30 @@ public class ContactController(DataContext context) : ControllerBase
 {
     private readonly DataContext _context = context;
 
-
     [HttpPost]
     [UseApiKey]
-    public async Task<IActionResult> Create(Contact contactDto)
+
+    public async Task<IActionResult> Create(ContactModel contactModel)
     {
-        var contactEntity = new ContactEntity
-
+        if (ModelState.IsValid)
         {
-            FullName = contactDto.FullName,
-            Email = contactDto.Email,
-            SelectedService = contactDto.SelectedService,
-            Message = contactDto.Message
-        };
+            var contactEntity = new ContactEntity
+            {
+                FullName = contactModel.FullName,
+                Email = contactModel.Email,
+                SelectedService = contactModel.SelectedService,
+                Message = contactModel.Message
+            };
 
-        _context.Contacts.Add(contactEntity);
-        await _context.SaveChangesAsync();
+            _context.Contacts.Add(contactEntity);
+            await _context.SaveChangesAsync();
 
-        return CreatedAtRoute(new { }, new { message = "Contact added successfully" });
-
+            return CreatedAtRoute(new { }, new { message = "Contact added successfully" });
+        }
+        else
+        {
+            return BadRequest(ModelState);
+        }
     }
+
 }

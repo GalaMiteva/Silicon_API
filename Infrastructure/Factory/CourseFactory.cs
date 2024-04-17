@@ -1,13 +1,11 @@
 ﻿
-
-using Infrastructure.Dtos;
 using Infrastructure.Entities;
+using Infrastructure.Models;
 
 namespace Infrastructure.Factory;
 
 public class CourseFactory
 {
-
     public static Course Create(CourseEntity entity)
     {
         try
@@ -24,7 +22,7 @@ public class CourseFactory
                 LikesInProcent = entity.LikesInProcent,
                 Author = entity.Author,
                 Img = entity.Img,
-                Category = entity.Category!.CategoryName,
+                Category = entity.Category?.CategoryName!,
             };
         }
         catch { }
@@ -40,11 +38,8 @@ public class CourseFactory
             {
                 courses.Add(Create(entity));
             }
-
-
         }
         catch { }
         return courses;
     }
-
 }

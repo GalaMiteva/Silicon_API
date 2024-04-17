@@ -7,14 +7,15 @@ namespace Silicon_ASP_NET_API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CategoryController(DataContext dataContext) : ControllerBase
+public class CategoriesController(DataContext dataContext) : ControllerBase
 {
+
     private readonly DataContext _dataContext = dataContext;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var categories = await _dataContext.Categories.OrderBy(o => o.CategoryName).ToListAsync();
+        var categories = await _dataContext.Category.OrderBy(o => o.CategoryName).ToListAsync();
         return Ok(CategoryFactory.Create(categories));
     }
 }

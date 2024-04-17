@@ -8,6 +8,7 @@ public static class JwtConfiguration
 {
     public static void RegisterJwt(this IServiceCollection services, IConfiguration configuration)
     {
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(x =>
             {
@@ -17,15 +18,14 @@ public static class JwtConfiguration
                     ValidIssuer = configuration["Jwt:Issuer"],
 
                     ValidateAudience = true,
-                    ValidAudience = configuration[" Jwt:Audience"],
+                    ValidAudience = configuration["Jwt:Audience"],
 
                     ValidateLifetime = true,
 
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
 
-
-                    ClockSkew = TimeSpan.Zero,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
     }

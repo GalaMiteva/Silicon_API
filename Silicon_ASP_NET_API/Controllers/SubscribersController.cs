@@ -9,11 +9,10 @@ namespace Silicon_ASP_NET_API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+
 public class SubscribersController(DataContext context) : ControllerBase
 {
     private readonly DataContext _context = context;
-
-
 
     #region CREATE
     [HttpPost]
@@ -47,15 +46,15 @@ public class SubscribersController(DataContext context) : ControllerBase
                     return Problem("Unable to create subscription.");
                 }
             }
-            return Conflict("Your email address is already subsribed.");
+            return Conflict("Email already exists.");
         }
-        return BadRequest("You must enter an valid email address.");
+        return BadRequest();
     }
 
     #endregion
 
 
-    #region GetAll / GetOne
+    #region READ
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -72,7 +71,7 @@ public class SubscribersController(DataContext context) : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOne(int id)
     {
-        var subscriber = await _context.Subscribers.FindAsync(id); 
+        var subscriber = await _context.Subscribers.FindAsync(id); //move to repository
 
         if (subscriber != null)
         {
@@ -84,14 +83,11 @@ public class SubscribersController(DataContext context) : ControllerBase
 
     #endregion
 
-
-
     #region UPDATE
-
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateOne(int id, string email)
     {
-        var subscriber = await _context.Subscribers.FindAsync(id); 
+        var subscriber = await _context.Subscribers.FindAsync(id); //move to repository
 
         if (subscriber != null)
         {
@@ -106,13 +102,10 @@ public class SubscribersController(DataContext context) : ControllerBase
 
     #endregion
 
-
     #region DELETE
 
-    //[HttpDelete("{id}")]
-
-
     [HttpDelete]
+    [UseApiKey]
     public async Task<IActionResult> DeleteOne([FromQuery] string email)
     {
         var subscriber = await _context.Subscribers.FirstOrDefaultAsync(x => x.Email == email);
@@ -121,13 +114,11 @@ public class SubscribersController(DataContext context) : ControllerBase
             _context.Subscribers.Remove(subscriber);
             await _context.SaveChangesAsync();
 
-            return Ok($"User with email '{email}' has been successfully deleted.");
+            return Ok($"Subscriber with email '{email}' has been successfully deleted.");
         }
 
-        return NotFound($"User with email '{email}' not found.");
+        return NotFound($"Subscriber with email '{email}' not found.");
     }
 
     #endregion
-
-
 }

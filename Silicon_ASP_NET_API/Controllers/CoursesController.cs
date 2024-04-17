@@ -1,7 +1,8 @@
 ﻿using Infrastructure.Contexts;
-using Infrastructure.Dtos;
+
 using Infrastructure.Entities;
 using Infrastructure.Factory;
+using Infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,41 +16,44 @@ namespace Silicon_ASP_NET_API.Controllers;
 [ApiController]
 public class CoursesController(DataContext context) : ControllerBase
 {
-
     private readonly DataContext _context = context;
 
-    [HttpGet]
     [UseApiKey]
-
-    public async Task<IActionResult> GetAll(string category = "", string searchQuery = "", int pageNumber = 1, int pageSize = 10)
+    [HttpGet]
+    public async Task<IActionResult> GetAll(string category = "", string searchQuery = "", int pageNumber = 1, int pageSize = 9)
     {
-        var query = _context.Courses.Include(i => i.Category).AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(category) && category != "all")
-            query = query.Where(x => x.Category!.CategoryName == category);
-
-        if (!string.IsNullOrEmpty(searchQuery))
-            query = query.Where(x => x.Title.Contains(searchQuery) || x.Author!.Contains(searchQuery));
-
-        query = query.OrderByDescending(x => x.Title);
-        var courses = await query.ToListAsync();
-
-        var response = new CourseResult
+        if (ModelState.IsValid)
         {
-            Succeeded = true,
-            TotalItems = await query.CountAsync(),
-        };
+            var query = _context.Courses.Include(i => i.Category).AsQueryable();
 
-        response.TotalPages = (int)Math.Ceiling(response.TotalItems / (double)pageSize);
-        response.Courses = CourseFactory.Create(await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync());
+            if (!string.IsNullOrWhiteSpace(category) && category != "all")
+                query = query.Where(x => x.Category!.CategoryName == category);
 
+            if (!string.IsNullOrEmpty(searchQuery))
+                query = query.Where(x => x.Title.Contains(searchQuery) || x.Author.Contains(searchQuery));
 
-        return Ok(response);
+            query = query.OrderByDescending(o => o.Title);
+            var courses = await query.ToListAsync();
+
+            var response = new CourseResult
+            {
+                Succeeded = true,
+                TotalItems = await query.CountAsync(),
+            };
+
+            response.TotalPages = (int)Math.Ceiling(response.TotalItems / (double)pageSize);
+            response.Courses = CourseFactory.Create(await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync());
+
+            return Ok(response);
+        }
+        else
+        {
+            return BadRequest(ModelState);
+        }
     }
 
 
-
-
+    [UseApiKey]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOne(int id)
     {
@@ -59,9 +63,12 @@ public class CoursesController(DataContext context) : ControllerBase
         {
             return Ok(course);
         }
+
         return NotFound();
     }
 
+    [UseApiKey]
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateOne(CourseRegistrationForm form)
     {
@@ -77,21 +84,19 @@ public class CoursesController(DataContext context) : ControllerBase
                 LikesInNumbers = form.LikesInNumbers,
                 LikesInProcent = form.LikesInProcent,
                 Author = form.Author,
-                Img = form.Img
+                Img = form.Img,
             };
             _context.Courses.Add(courseEntity);
             await _context.SaveChangesAsync();
 
-            return Created("", (CourseForm)courseEntity);
+            return Created("", (CourseCreate)courseEntity);
         }
         return BadRequest();
     }
 
-
     [UseApiKey]
     [Authorize]
     [HttpPut("{id}")]
-
     public async Task<IActionResult> Update(int id, [FromBody] CourseRegistrationForm model)
     {
         var course = await _context.Courses.FindAsync(id);
@@ -110,11 +115,9 @@ public class CoursesController(DataContext context) : ControllerBase
         return NoContent();
     }
 
-
     [UseApiKey]
     [Authorize]
     [HttpDelete("{id}")]
-
     public async Task<IActionResult> Delete(int id)
     {
 

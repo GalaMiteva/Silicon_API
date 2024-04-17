@@ -1,7 +1,8 @@
 ﻿
 
-using Infrastructure.Dtos;
+
 using Infrastructure.Entities;
+using Infrastructure.Models;
 
 namespace Infrastructure.Factory;
 
