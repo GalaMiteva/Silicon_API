@@ -67,8 +67,8 @@ public class CoursesController(DataContext context) : ControllerBase
         return NotFound();
     }
 
-    [UseApiKey]
-    [Authorize]
+    //[UseApiKey]
+    //[Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateOne(CourseRegistrationForm form)
     {
