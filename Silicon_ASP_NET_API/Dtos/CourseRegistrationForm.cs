@@ -14,4 +14,7 @@ public class CourseRegistrationForm
     public decimal LikesInProcent { get; set; }
     public string? Author { get; set; }
     public string? Img { get; set; }
+
+
+   
 }

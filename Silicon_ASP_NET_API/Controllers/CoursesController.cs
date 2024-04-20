@@ -30,7 +30,7 @@ public class CoursesController(DataContext context) : ControllerBase
                 query = query.Where(x => x.Category!.CategoryName == category);
 
             if (!string.IsNullOrEmpty(searchQuery))
-                query = query.Where(x => x.Title.Contains(searchQuery) || x.Author.Contains(searchQuery));
+                query = query.Where(x => x.Title.Contains(searchQuery) || x.Author!.Contains(searchQuery));
 
             query = query.OrderByDescending(o => o.Title);
             var courses = await query.ToListAsync();
@@ -70,7 +70,37 @@ public class CoursesController(DataContext context) : ControllerBase
     //[UseApiKey]
     //[Authorize]
     [HttpPost]
-    public async Task<IActionResult> CreateOne(CourseRegistrationForm form)
+
+
+
+    //public async Task<IActionResult> Create(CourseRegistrationForm form)
+    //{
+    //    if (ModelState.IsValid)
+    //    {
+    //        var courseEntity = new CourseEntity
+    //        {
+    //            Title = form.Title,
+    //            Price = form.Price,
+    //            DiscountPrice = form.DiscountPrice,
+    //            Hours = form.Hours,
+    //            IsBestseller = form.IsBestseller,
+    //            LikesInNumbers = form.LikesInNumbers,
+    //            LikesInProcent = form.LikesInProcent,
+    //            Author = form.Author,
+    //            Img = form.Img,
+
+    //            //bez
+    //            CategoryId=form.CategoryId,
+    //        };
+    //        _context.Courses.Add(courseEntity);
+    //        await _context.SaveChangesAsync();
+
+    //        return Created("", (CourseCreate)courseEntity);
+    //    }
+    //    return BadRequest();
+    //}
+
+    public async Task<IActionResult> Create(CourseRegistrationForm form)
     {
         if (ModelState.IsValid)
         {
@@ -85,6 +115,8 @@ public class CoursesController(DataContext context) : ControllerBase
                 LikesInProcent = form.LikesInProcent,
                 Author = form.Author,
                 Img = form.Img,
+
+                
             };
             _context.Courses.Add(courseEntity);
             await _context.SaveChangesAsync();

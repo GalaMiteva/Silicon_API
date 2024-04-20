@@ -22,7 +22,7 @@ public class CourseFactory
                 LikesInProcent = entity.LikesInProcent,
                 Author = entity.Author,
                 Img = entity.Img,
-                Category = entity.Category?.CategoryName!,
+               
             };
         }
         catch { }

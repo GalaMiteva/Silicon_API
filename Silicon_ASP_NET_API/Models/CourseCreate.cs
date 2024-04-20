@@ -13,8 +13,8 @@ public class CourseCreate
     public decimal LikesInNumbers { get; set; }
     public decimal LikesInProcent { get; set; }
     public string? Author { get; set; }
-    public string? ImageUrl { get; set; } = null!;
-    public string? Category { get; set; }
+    public string? Img { get; set; } = null!;
+    public int? CategoryId { get; set; }
 
     public static implicit operator CourseCreate(CourseEntity courseEntity)
     {
@@ -29,8 +29,8 @@ public class CourseCreate
             LikesInNumbers = courseEntity.LikesInNumbers,
             LikesInProcent = courseEntity.LikesInProcent,
             Author = courseEntity.Author,
-            ImageUrl = courseEntity.Img,
-            Category = courseEntity.Category?.CategoryName
+            Img = courseEntity.Img,
+            CategoryId = courseEntity.Category?.Id
         };
     }
 }
