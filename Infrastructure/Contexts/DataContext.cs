@@ -14,4 +14,17 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     public DbSet<ContactEntity> Contacts { get; set; } = null!;
     public DbSet<UserEntity> Users { get; set; } = null!;
 
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<SubscriberEntity>()
+            .HasIndex(e => e.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<ContactEntity>()
+            .HasKey(e => e.Id);
+    }
+
 }

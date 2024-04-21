@@ -73,32 +73,7 @@ public class CoursesController(DataContext context) : ControllerBase
 
 
 
-    //public async Task<IActionResult> Create(CourseRegistrationForm form)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        var courseEntity = new CourseEntity
-    //        {
-    //            Title = form.Title,
-    //            Price = form.Price,
-    //            DiscountPrice = form.DiscountPrice,
-    //            Hours = form.Hours,
-    //            IsBestseller = form.IsBestseller,
-    //            LikesInNumbers = form.LikesInNumbers,
-    //            LikesInProcent = form.LikesInProcent,
-    //            Author = form.Author,
-    //            Img = form.Img,
-
-    //            //bez
-    //            CategoryId=form.CategoryId,
-    //        };
-    //        _context.Courses.Add(courseEntity);
-    //        await _context.SaveChangesAsync();
-
-    //        return Created("", (CourseCreate)courseEntity);
-    //    }
-    //    return BadRequest();
-    //}
+   
 
     public async Task<IActionResult> Create(CourseRegistrationForm form)
     {
@@ -126,8 +101,8 @@ public class CoursesController(DataContext context) : ControllerBase
         return BadRequest();
     }
 
-    [UseApiKey]
-    [Authorize]
+    //[UseApiKey]
+    //[Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] CourseRegistrationForm model)
     {
@@ -147,8 +122,8 @@ public class CoursesController(DataContext context) : ControllerBase
         return NoContent();
     }
 
-    [UseApiKey]
-    [Authorize]
+    //[UseApiKey]
+    //[Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
