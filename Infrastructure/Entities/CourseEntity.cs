@@ -1,5 +1,7 @@
 ﻿
 
+using Infrastructure.Models;
+
 namespace Infrastructure.Entities;
 
 public class CourseEntity
@@ -17,4 +19,25 @@ public class CourseEntity
 
     public int? CategoryId { get; set; }
     public CategoryEntity? Category { get; set; }
+
+    public static implicit operator CourseEntity(Course model)
+    {
+        return new CourseEntity
+        {
+            Title = model.Title,
+            Author = model.Author,
+            Price = model.Price,
+            DiscountPrice = model.DiscountPrice,
+            Hours = model.Hours,
+            LikesInNumbers = model.LikesInNumbers,
+            LikesInProcent = model.LikesInProcent,
+            IsBestseller = model.IsBestseller,
+            Img = model.Img,
+            
+            Category = new CategoryEntity
+            {
+                CategoryName = model.Category!
+            }
+        };
+    }
 }

@@ -1,4 +1,6 @@
 ﻿
+using Infrastructure.Entities;
+
 namespace Infrastructure.Models;
 
 public class Course
@@ -14,5 +16,27 @@ public class Course
     public string? Author { get; set; }
     public string? Img { get; set; }
     public string? Category { get; set; } = null!;
-    //public int? CategoryId { get; set; }
+    public int? CategoryId { get; set; }
+
+
+    //public static implicit operator CourseEntity(Course model)
+    //{
+    //    return new CourseEntity
+    //    {
+    //        Title = model.Title,
+    //        Author = model.Author,
+    //        Price = model.Price,
+    //        DiscountPrice = model.DiscountPrice,
+    //        Hours = model.Hours,
+    //        LikesInNumbers = model.LikesInNumbers,
+    //        LikesInProcent = model.LikesInProcent,
+    //        IsBestseller = model.IsBestseller,
+    //        Img = model.Img,
+
+    //        Category = new CategoryEntity
+    //        {
+    //            CategoryName = model.Category!
+    //        }
+    //    };
+    //}
 }

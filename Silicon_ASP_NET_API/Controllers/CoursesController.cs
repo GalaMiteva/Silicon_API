@@ -75,7 +75,7 @@ public class CoursesController(DataContext context) : ControllerBase
 
    
 
-    public async Task<IActionResult> Create(CourseRegistrationForm form)
+    public async Task<IActionResult> Create(Course form)
     {
         if (ModelState.IsValid)
         {
@@ -90,8 +90,8 @@ public class CoursesController(DataContext context) : ControllerBase
                 LikesInProcent = form.LikesInProcent,
                 Author = form.Author,
                 Img = form.Img,
+                CategoryId = form.CategoryId
 
-                
             };
             _context.Courses.Add(courseEntity);
             await _context.SaveChangesAsync();
