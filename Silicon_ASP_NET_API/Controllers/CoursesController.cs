@@ -104,7 +104,7 @@ public class CoursesController(DataContext context) : ControllerBase
     //[UseApiKey]
     //[Authorize]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] CourseRegistrationForm model)
+    public async Task<IActionResult> Update(int id, [FromBody] Course model)
     {
         var course = await _context.Courses.FindAsync(id);
 
